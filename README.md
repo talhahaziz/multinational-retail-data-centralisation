@@ -24,6 +24,13 @@ git clone https://github.com/talhahaziz/multinational-retail-data-centralisation
 
 - Set up a database 'sales_data' within pgadmin4. I will use this database to store company information that I extract from various sources. 
 
-- Created data_extraction.py which will be used to extract and clean the data
+- Initialised the three classes which will be used to clean, extract and connect the data
 
+    1. DataExtractor class - responsible for methods used to extract data from the data sources. The sources will include a  CSV file, an API and an S3 bucket.
+
+    1. DatabaseConnector class - used to connect to the database and upload the cleaned data ready for analysis.
+
+    1. DataCleaning class - include methods to clean the data from the various sources. 
+
+- Added the database credentials to the .yaml file and included a .gitignore to ensure the credentials are not uploaded to Github.
 
