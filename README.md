@@ -32,5 +32,17 @@ git clone https://github.com/talhahaziz/multinational-retail-data-centralisation
 
     1. DataCleaning class - include methods to clean the data from the various sources. 
 
+
+# Task 3 - Extract and clean user data
+
 - Added the database credentials to the .yaml file and included a .gitignore to ensure the credentials are not uploaded to Github.
 
+- Created the following methods in the DatabaseConnector class which will be used to connect and retrieve data from the AWS database:
+
+    1. read_db_creds(): read the AWS database credentials from a YAML file and return a python dictionary of said credentials. 
+
+    1. init_db_engine(): uses the read_db_cred() method to retrieve database credentials and uses these to initialise and return a SQLalchemy engine connecting to the database.
+
+    1. list_db_tables(): lists the tables present in the database so I know which tables I can extract the data from
+
+    1. upload_to_db(): takes in a pandas dataframe and table name and uploads them to the local sales_db database setup within pgadmin4
