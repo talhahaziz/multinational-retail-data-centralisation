@@ -32,9 +32,6 @@ git clone https://github.com/talhahaziz/multinational-retail-data-centralisation
 
     1. DataCleaning class - include methods to clean the data from the various sources. 
 
-
-# Task 3 - Extract and clean user data
-
 - Added the database credentials to the .yaml file and included a .gitignore to ensure the credentials are not uploaded to Github.
 
 - Created the following methods in the DatabaseConnector class which will be used to connect and retrieve data from the AWS database:
