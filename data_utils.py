@@ -23,9 +23,9 @@ class DatabaseConnector:
     def list_db_tables(self):
          engine = self.init_db_engine()
          inspector = inspect(engine) #sqalchemy inspector object
-         tables = inspector.get_table_names()
+         table_names = inspector.get_table_names()
 
-         print(tables)
+         print(table_names)
 
     def upload_to_db(self, df, table_name):
 

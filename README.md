@@ -22,7 +22,7 @@ git clone https://github.com/talhahaziz/multinational-retail-data-centralisation
 
 ## Milestone 2 (Task - 1,2 & 3)
 
-- Set up a database 'sales_data' within pgadmin4. I will use this database to store company information that I extract from various sources. 
+- Set up a database 'sales_data' within pgadmin4. I will use this database to store company information that I extract from various sources. These include a CSV file, an APO and an S3 bucket.
 
 - Initialised the three classes which will be used to clean, extract and connect the data
 
