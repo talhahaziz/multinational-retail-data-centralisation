@@ -1,7 +1,6 @@
 import yaml
 import psycopg2
-from sqlalchemy import create_engine
-from sqlalchemy import inspect
+from sqlalchemy import create_engine, inspect
 import pandas as pd
 
 class DatabaseConnector:
@@ -28,7 +27,9 @@ class DatabaseConnector:
 
          print(tables)
 
+    def upload_to_db(self, df, table_name):
 
-         
-
+        db_creds = self.read_db_creds('db_creds.yaml')
+        engine = create_engine(f"postgresql+psycopg2://{db_creds['RDS_USER']}:{db_creds['RDS_PASSWORD']}@{db_creds['RDS_HOST']}:{db_creds['RDS_PORT']}/{db_creds['RDS_DATABASE']}")
+        df.to_sql(table_name, engine, if_exists='replace', index=False, index_label='index')
 
