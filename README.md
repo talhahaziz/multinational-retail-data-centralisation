@@ -20,7 +20,7 @@ I will then query the database to get up-to-date metrics for business.
 git clone https://github.com/talhahaziz/multinational-retail-data-centralisation
 ```
 
-## Milestone 2
+## Milestone 2 (Task - 1,2 & 3)
 
 - Set up a database 'sales_data' within pgadmin4. I will use this database to store company information that I extract from various sources. 
 
@@ -43,3 +43,10 @@ git clone https://github.com/talhahaziz/multinational-retail-data-centralisation
     1. list_db_tables(): lists the tables present in the database so I know which tables I can extract the data from
 
     1. upload_to_db(): takes in a pandas dataframe and table name and uploads them to the local sales_db database setup within pgadmin4
+
+- Created 
+    1. read_rds_table: In DatabaseExtractor class in data_extraction.py which extracts the database table to a pandas dataframe. 
+
+- Created a new method in the DataCleaning class:
+
+    1. cleam_user_data: this method takes in the tables removing Null values, date errors, incomplete rows and incorrect information.
