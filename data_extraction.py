@@ -25,4 +25,11 @@ class DataExtractor:
         table_df = pd.concat(table)
 
         return table_df
+    
+    def list_number_of_stores(self, endpoint):
+        url = endpoint
+
+        connect = DatabaseConnector()
+        headers = connect.read_db_creds()
+
 

@@ -79,3 +79,96 @@ def upload_to_db(self, df, table_name):
 db_connect = DatabaseConnector()
 db_connect.upload_to_db(table, 'dim_card_details')
 ```
+
+## Milestone 2 Task 5
+
+## Milestone 2 Task 5
+
+Task 5 is concerned with retrieving the store data through the use of an API, cleaning and storing it in the postgres database.
+
+- Created the method 'list_number_of_stores' in the DataExtractor class which sends a GET request to the endpoint storing the number of stores there are. Through this I will know how many stores need to be extracted from the API.
+
+```python
+def list_number_of_stores(self, endpoint):
+
+    url = endpoint 
+
+    # reads in the x-api-key needed for authorisation and saves it as 'headers' which will be sent with the request
+    connect = DatabaseConnector()
+    headers = connect.read_db_creds('api_key.yaml')
+
+    response = requests.get(url, headers=headers)
+
+    data = response.json()
+    number_of_stores = data['number_stores']
+
+    return number_of_stores
+```
+
+- Defined the method 'retrieve_store_data' in the same class which uses a for loop to first change the {store_number} parameter in the API endpoint to the required store index and then retrieves it. 
+
+- Each store is stored in the store_details list as a dictionary, this is then used to create a pandas dataframe. 
+
+```python
+def retrieve_stores_data(self, endpoint):
+
+    url = endpoint
+
+    connect = DatabaseConnector()
+    headers = connect.read_db_creds('api_key.yaml')
+
+    # calls the list_number_of_stores method to retrieve the amount of stores 
+    number_of_stores = self.list_number_of_stores('https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores')
+
+    # empty list which will store each of the store details as a dictionory. This will be used to create the dataframe
+    stores_list = []
+
+    # sends a get request for each store 
+    for i in range(number_of_stores):
+        
+        # replaces the parameter '{store_number}' for i which is a store index
+        new_url = url.replace('{store_number}', str(i))
+        response = requests.get(new_url, headers=headers)
+        data = response.json() 
+        stores_list.append(data)
+
+    # creates a pandas dataframe from the list of dictionaries storing store details 
+    store_data_df = pd.DataFrame(stores_list)
+
+    return store_data_df
+```
+- Created the method clean_store_details in the DataCleaning class which cleans the store details and uploads the clean pandas dataframe to postgres
+
+```python
+# sets the index of the pandas dataframe 
+table.set_index('index', inplace=True)
+
+# removes 'lat' column which is not needed and is only filled with null values 
+table.drop('lat', axis=1, inplace=True)
+
+# some of the values in the continent column have an error where they begin with 'ee' but are otherwise correct. This removes the 'ee' substring from those rows. 
+table['continent'] = table['continent'].str.replace('ee', '')
+
+# changes 'country_code', 'continent' and 'store_type' columns data type to category
+table['country_code'] = table['country_code'].astype('category')
+table['continent'] = table['continent'].astype('category')
+table['store_type'] = table['store_type'].astype('category')
+
+# Defines a set of valid country codes and removes rows where the column entry does not match these. This removes rows filled with null values and incorrect data. 
+country_codes = {'GB', 'US', 'DE'}
+inconsistent_categories = set(table['country_code']) - country_codes
+inconsistent_rows = table['country_code'].isin(inconsistent_categories)
+table = table[~inconsistent_rows]   
+
+# removes any alphabetical characters from rows in the staff_numbers column using a regular expression so they are ready to be converted to data type int
+table['staff_numbers'] = table['staff_numbers'].str.replace(r"[a-zA-z]", '')
+
+# changes the staff_numbers data type to numberic so it can used for calculations
+table['staff_numbers'] = pd.to_numeric(table['staff_numbers'])
+
+# uses to_datetime() method to correct date entries in the opening_date column and changes the column data type to datetime
+table['opening_date'] = pd.to_datetime(table['opening_date'], infer_datetime_format=True, errors='coerce')
+table['opening_date'] = table['opening_date'].astype('datetime64[ns]')
+# removes timestamp from column as only the date is required 
+table['opening_date'] = table['opening_date'].dt.date
+```
