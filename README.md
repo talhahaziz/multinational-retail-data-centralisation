@@ -81,9 +81,6 @@ db_connect.upload_to_db(table, 'dim_card_details')
 ```
 
 ## Milestone 2 Task 5
-
-## Milestone 2 Task 5
-
 Task 5 is concerned with retrieving the store data through the use of an API, cleaning and storing it in the postgres database.
 
 - Created the method 'list_number_of_stores' in the DataExtractor class which sends a GET request to the endpoint storing the number of stores there are. Through this I will know how many stores need to be extracted from the API.
